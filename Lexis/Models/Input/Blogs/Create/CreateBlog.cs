@@ -15,7 +15,7 @@ public class CreateBlogValidator : AbstractValidator<CreateBlog>
     {
         RuleFor(c => c.Text)
             .NotEmpty()
-            .WithMessage("Text cannot be empty or null");
+            .WithMessage("Text cannot be null or empty");
 
         RuleFor(c => c.AuthorId)
             .NotEmpty()
