@@ -13,7 +13,7 @@ public class BlogTests
         Action action = () => Blog.Create(ObjectId.Empty, "text");
 
         //assert
-        Assert.Throws<Exception>(() => action());
+        Assert.Throws<LexisException>(() => action());
     }
 
     [Fact]
@@ -43,6 +43,6 @@ public class BlogTests
         Action action = () => Blog.Create(authorId, text);
 
         //assert
-        Assert.Throws<Exception>(() => action());
+        Assert.Throws<LexisException>(() => action());
     }
 }

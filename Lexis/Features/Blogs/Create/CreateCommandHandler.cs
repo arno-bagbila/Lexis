@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain;
 using Domain.Entities;
 using MediatR;
 using MongoDB.Bson;
@@ -29,7 +30,8 @@ public class CreateCommandHandler : IRequestHandler<CreateCommand, Blog>
         var definition = command.CreateBlog;
 
         var authorFilter = Builders<User>.Filter.Eq(x => x.Id, ObjectId.Parse(definition.AuthorId));
-        var author =  await _users.Find(authorFilter).FirstOrDefaultAsync(cancellationToken) ?? throw new Exception("Cannot find User to assign the blog");
+        var author =  await _users.Find(authorFilter).FirstOrDefaultAsync(cancellationToken) ?? 
+                      throw LexisException.Create(LexisException.InvalidDataCode, "Cannot find User to assign the blog");
 
         var blog = Domain.Entities.Blog.Create(author.Id, definition.Text);
         await _blogs.InsertOneAsync(blog, cancellationToken: cancellationToken);

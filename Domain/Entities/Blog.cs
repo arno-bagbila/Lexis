@@ -36,7 +36,7 @@ public class Blog
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                throw new Exception($"{nameof(Text)} cannot be null or empty");
+                throw LexisException.Create(LexisException.InvalidDataCode, $"{nameof(Text)} cannot be null or empty");
             }
 
             _text = value;
@@ -70,7 +70,7 @@ public class Blog
         var validationResult = CanCreate(authorId);
         if (validationResult != ValidationResult.Success)
         {
-            throw new Exception(validationResult.ErrorMessage);
+            throw LexisException.Create(LexisException.InvalidDataCode, validationResult.ErrorMessage!);
         }
 
         return new Blog

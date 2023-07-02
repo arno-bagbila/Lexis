@@ -81,5 +81,4 @@ public class BlogsController : MediatorAwareController
     }
 
     #endregion
-
 }

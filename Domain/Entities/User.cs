@@ -63,7 +63,7 @@ public class User
         var validationResult = CanCreate(firstName, lastName);
         if (validationResult != ValidationResult.Success)
         {
-            throw new Exception(validationResult.ErrorMessage);
+            throw LexisException.Create(LexisException.InvalidDataCode, validationResult.ErrorMessage!);
         }
 
         return new User
