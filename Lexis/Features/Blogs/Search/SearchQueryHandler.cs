@@ -44,7 +44,8 @@ public class SearchQueryHandler : IRequestHandler<SearchQuery, IEnumerable<Blog>
         var blogs =  await blogsQuery
             .ToListAsync(cancellationToken);
 
-        //Setting the logic only if there is a claim in the context. If not we bypass this operation.
+        //Setting the logic only if there is a claim in the context. If not we bypass this operation. 
+        //As this is a simulation we don't want to altered the existing behavior.
         var userRole = currentUserClaims.FirstOrDefault(x => x.Value == JwtClaimTypes.Role);
 
         if (userRole == null || string.IsNullOrWhiteSpace(userRole.Value)) return _mapper.Map<IEnumerable<Blog>>(blogs);
