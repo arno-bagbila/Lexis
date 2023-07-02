@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using LexisApi.Models.Output.Blogs;
 using MediatR;
 
 namespace LexisApi.Features.Blogs.Search;

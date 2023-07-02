@@ -8,7 +8,7 @@ using LexisApi.Models.Input.Blogs.Create;
 using LexisApi.Models.Input.Users.Create;
 using MongoDB.Bson;
 
-namespace LexisApi.Tests.Input.Users.Create;
+namespace LexisApi.Tests.Models.Input.Users.Create;
 
 public class CreateUserTests
 {
@@ -51,7 +51,7 @@ public class CreateUserTests
         //arrange
         var firstName = "firstName";
         var lastName = "lastName";
-        var model = new CreateUser { FirstName = firstName, LastName = lastName};
+        var model = new CreateUser { FirstName = firstName, LastName = lastName };
 
         //act
         var validator = _createUserValidator.TestValidate(model);

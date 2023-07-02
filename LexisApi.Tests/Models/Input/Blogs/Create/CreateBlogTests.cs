@@ -2,7 +2,7 @@
 using FluentValidation.TestHelper;
 using MongoDB.Bson;
 
-namespace LexisApi.Tests.Input.Blogs.Create;
+namespace LexisApi.Tests.Models.Input.Blogs.Create;
 
 public class CreateBlogTests
 {
@@ -16,7 +16,7 @@ public class CreateBlogTests
     [Fact]
     public void CreateBlog_InvalidAuthorId_ShouldHaveError()
     {
-        var invalidAuthorIds = new List<string> { null!, string.Empty, " ",  "logoUrl", "" };
+        var invalidAuthorIds = new List<string> { null!, string.Empty, " ", "logoUrl", "" };
 
         foreach (var validator in invalidAuthorIds
                      .Select(invalidAuthorId => new CreateBlog { AuthorId = invalidAuthorId })
@@ -45,7 +45,7 @@ public class CreateBlogTests
         //arrange
         var authorId = ObjectId.GenerateNewId().ToString();
         var text = "BlogText";
-        var model = new CreateBlog { AuthorId = authorId, Text = text};
+        var model = new CreateBlog { AuthorId = authorId, Text = text };
 
         //act
         var validator = _createBlogValidator.TestValidate(model);
