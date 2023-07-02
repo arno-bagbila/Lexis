@@ -29,6 +29,7 @@ builder.Services.AddSingleton<IMongoClient, MongoClient>(sp =>
     new MongoClient(builder.Configuration.GetConnectionString("MongoDb")));
 
 builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddHttpContextAccessor();
 
 
 var app = builder.Build();

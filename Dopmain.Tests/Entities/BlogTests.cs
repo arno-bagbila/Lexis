@@ -45,4 +45,36 @@ public class BlogTests
         //assert
         Assert.Throws<LexisException>(() => action());
     }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData(null)]
+    public void SetCategory_InvalidValues_ThrowException(string category)
+    {
+        //arrange
+        var authorId = ObjectId.GenerateNewId();
+        var blog = Blog.Create(authorId, "Text");
+
+        //act
+        Action action = () => blog.SetCategory(category);
+
+        //assert
+        Assert.Throws<LexisException>(() => action());
+    }
+
+    [Fact]
+    public void SetCategory_WithValidValue_CategoryIsSet()
+    {
+        //arrange
+        var authorId = ObjectId.GenerateNewId();
+        var blog = Blog.Create(authorId, "Text");
+        var category = "Category";
+
+        //act
+        blog.SetCategory(category);
+
+        //assert
+        blog.Category.Should().Be("Category");
+    }
 }

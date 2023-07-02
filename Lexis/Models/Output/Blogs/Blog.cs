@@ -13,6 +13,8 @@ public class Blog
     public DateTime CreatedOn { get; private set; }
 
     public DateTime PublishedOn { get; set; }
+
+    public string Category { get; set; } = null!;
 }
 
 public class BlogMappingProfile : Profile

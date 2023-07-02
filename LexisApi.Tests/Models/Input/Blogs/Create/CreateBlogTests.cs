@@ -32,7 +32,7 @@ public class CreateBlogTests
         var invalidTexts = new List<string> { null!, string.Empty, " ", "" };
 
         foreach (var validator in invalidTexts
-                     .Select(invalidText => new CreateBlog { AuthorId = invalidText })
+                     .Select(invalidText => new CreateBlog { Text = invalidText })
                      .Select(model => _createBlogValidator.TestValidate(model)))
         {
             validator.ShouldHaveValidationErrorFor(c => c.Text);
@@ -45,7 +45,7 @@ public class CreateBlogTests
         //arrange
         var authorId = ObjectId.GenerateNewId().ToString();
         var text = "BlogText";
-        var model = new CreateBlog { AuthorId = authorId, Text = text };
+        var model = new CreateBlog { AuthorId = authorId, Text = text, Category = "Category"};
 
         //act
         var validator = _createBlogValidator.TestValidate(model);

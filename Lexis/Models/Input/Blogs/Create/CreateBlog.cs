@@ -7,6 +7,8 @@ public class CreateBlog
 {
     public string AuthorId { get; set; } = null!;
     public string Text { get; set; } = null!;
+
+    public string Category { get; set; } = null!;
 }
 
 public class CreateBlogValidator : AbstractValidator<CreateBlog>

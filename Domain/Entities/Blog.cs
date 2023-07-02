@@ -29,6 +29,8 @@ public class Blog
     /// </summary>
     public DateTime PublishedOn { get; set; }
 
+    public string Category { get; private set; } = null!;
+
     public string Text
     {
         get => _text;
@@ -78,5 +80,19 @@ public class Blog
             AuthorId = authorId,
             Text = text
         };
+    }
+
+    /// <summary>
+    /// Set Blog Categories
+    /// </summary>
+    /// <param name="category">Category to assign to the blogs</param>
+    public void SetCategory(string category)
+    {
+        if (string.IsNullOrWhiteSpace(category))
+        {
+            throw LexisException.Create(LexisException.InvalidDataCode, "Category cannot be null or empty");
+        }
+
+        Category = category;
     }
 }

@@ -22,6 +22,7 @@ public class BlogProfileTests
         //arrange
         var authorId = ObjectId.GenerateNewId();
         var blog = Blog.Create(authorId, "Text");
+        blog.SetCategory("Category");
 
         //act
         var result = _mapper.Map<LexisApi.Models.Output.Blogs.Blog>(blog);
@@ -32,5 +33,6 @@ public class BlogProfileTests
         result.Text.Should().Be(blog.Text);
         result.CreatedOn.Should().Be(blog.CreatedOn);
         result.PublishedOn.Should().Be(blog.PublishedOn);
+        result.Category.Should().Be("Category");
     }
 }
