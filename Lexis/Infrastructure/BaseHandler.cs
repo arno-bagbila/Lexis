@@ -1,10 +1,21 @@
-﻿//namespace LexisApi.Infrastructure;
+﻿using MongoDB.Driver;
 
-//public abstract class BaseHandler
-//{
-//    #region Data
+namespace LexisApi.Infrastructure;
 
-//    protected 
+public abstract class BaseHandler
+{
+    #region Data
 
-//    #endregion
-//}
+    protected IMongoDatabase Database;
+
+    #endregion
+
+    #region Constructors
+
+    protected BaseHandler(IMongoClient client)
+    {
+        Database = client.GetDatabase("Lexis");
+    }
+
+    #endregion
+}

@@ -1,22 +1,20 @@
 ﻿using Domain.Entities;
+using LexisApi.Infrastructure;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace LexisApi.Features.Users.Search;
 
-public class SearchQueryHandler : IRequestHandler<SearchQuery, IEnumerable<Models.Output.Users.User>>
+public class SearchQueryHandler : BaseHandler, IRequestHandler<SearchQuery, IEnumerable<Models.Output.Users.User>>
 {
     private readonly IMongoCollection<User> _users;
     private readonly IMongoCollection<Blog> _blogs;
 
-    public SearchQueryHandler(IMongoClient client)
+    public SearchQueryHandler(IMongoClient client) : base(client)
     {
-        var database = client.GetDatabase("Lexis");
-        var usersCollection = database.GetCollection<User>(nameof(User));
-        var blogsCollection = database.GetCollection<Blog>(nameof(Blog));
-        _users = usersCollection;
-        _blogs = blogsCollection;
+        _users = Database.GetCollection<User>(nameof(User));
+        _blogs = Database.GetCollection<Blog>(nameof(Blog));
     }
 
     /// <summary>

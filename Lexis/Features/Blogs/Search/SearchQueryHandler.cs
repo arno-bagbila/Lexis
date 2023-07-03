@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using IdentityModel;
+using LexisApi.Infrastructure;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -7,18 +8,16 @@ using Blog = LexisApi.Models.Output.Blogs.Blog;
 
 namespace LexisApi.Features.Blogs.Search;
 
-public class SearchQueryHandler : IRequestHandler<SearchQuery, IEnumerable<Blog>>
+public class SearchQueryHandler : BaseHandler, IRequestHandler<SearchQuery, IEnumerable<Blog>>
 {
     private readonly IMongoCollection<Domain.Entities.Blog> _blogs;
     private readonly IMapper _mapper;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public SearchQueryHandler(IMongoClient client, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+    public SearchQueryHandler(IMongoClient client, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(client)
     {
         _mapper = mapper;
-        var database = client.GetDatabase("Lexis");
-        var collection = database.GetCollection<Domain.Entities.Blog>(nameof(Domain.Entities.Blog));
-        _blogs = collection;
+        _blogs = Database.GetCollection<Domain.Entities.Blog>(nameof(Domain.Entities.Blog));
         _httpContextAccessor = httpContextAccessor;
     }
 

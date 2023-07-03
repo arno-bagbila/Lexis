@@ -1,18 +1,17 @@
 ﻿using Domain.Entities;
+using LexisApi.Infrastructure;
 using MediatR;
 using MongoDB.Driver;
 
 namespace LexisApi.Features.Users.Create;
 
-public class CreateCommandHandler : IRequestHandler<CreateCommand, User>
+public class CreateCommandHandler : BaseHandler, IRequestHandler<CreateCommand, User>
 {
     private readonly IMongoCollection<User> _users;
 
-    public CreateCommandHandler(IMongoClient client)
+    public CreateCommandHandler(IMongoClient client) : base(client)
     {
-        var database = client.GetDatabase("Lexis");
-        var collection = database.GetCollection<User>(nameof(User));
-        _users = collection;
+        _users = Database.GetCollection<User>(nameof(User));
     }
 
     /// <summary>

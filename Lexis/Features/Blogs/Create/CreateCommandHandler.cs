@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain;
 using Domain.Entities;
+using LexisApi.Infrastructure;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -8,21 +9,17 @@ using Blog = LexisApi.Models.Output.Blogs.Blog;
 
 namespace LexisApi.Features.Blogs.Create;
 
-public class CreateCommandHandler : IRequestHandler<CreateCommand, Blog>
+public class CreateCommandHandler : BaseHandler, IRequestHandler<CreateCommand, Blog>
 {
     private readonly IMongoCollection<Domain.Entities.Blog> _blogs;
     private readonly IMongoCollection<User> _users;
     private readonly IMapper _mapper;
 
-    public CreateCommandHandler(IMongoClient client, IMapper mapper)
+    public CreateCommandHandler(IMongoClient client, IMapper mapper) : base(client)
     {
         _mapper = mapper;
-        var database = client.GetDatabase("Lexis");
-        var blogCollection = database.GetCollection<Domain.Entities.Blog>(nameof(Domain.Entities.Blog));
-        var userCollection = database.GetCollection<User>(nameof(User));
-        _blogs = blogCollection;
-        _users = userCollection;
-
+        _blogs = Database.GetCollection<Domain.Entities.Blog>(nameof(Domain.Entities.Blog));
+        _users = Database.GetCollection<User>(nameof(User));
     }
 
     public async Task<Blog> Handle(CreateCommand command, CancellationToken cancellationToken)
