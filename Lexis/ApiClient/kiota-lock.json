@@ -1,0 +1,29 @@
+{
+  "descriptionHash": "B157B8FA7E59860684BB3E95BBA561CAAF53F50024552F57C1445A874BAF9665039077D1DE8DDE3C8DAB419C2D28DB2332B8971C62C8D4F92E42708E788D41F3",
+  "descriptionLocation": "C:\\Users\\arbag\\source\\repos\\GitHub\\Lexis\\Lexis\\.\\openapi.json",
+  "lockFileVersion": "1.0.0",
+  "kiotaVersion": "1.3.0",
+  "clientClassName": "ApiClient",
+  "clientNamespaceName": "KiotaPosts.Client",
+  "language": "CSharp",
+  "usesBackingStore": false,
+  "includeAdditionalData": true,
+  "serializers": [
+    "Microsoft.Kiota.Serialization.Json.JsonSerializationWriterFactory",
+    "Microsoft.Kiota.Serialization.Text.TextSerializationWriterFactory",
+    "Microsoft.Kiota.Serialization.Form.FormSerializationWriterFactory"
+  ],
+  "deserializers": [
+    "Microsoft.Kiota.Serialization.Json.JsonParseNodeFactory",
+    "Microsoft.Kiota.Serialization.Text.TextParseNodeFactory",
+    "Microsoft.Kiota.Serialization.Form.FormParseNodeFactory"
+  ],
+  "structuredMimeTypes": [
+    "application/json",
+    "text/plain",
+    "application/x-www-form-urlencoded"
+  ],
+  "includePatterns": [],
+  "excludePatterns": [],
+  "disabledValidationRules": []
+}
