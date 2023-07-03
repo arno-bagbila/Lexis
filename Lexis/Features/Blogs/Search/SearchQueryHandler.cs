@@ -38,7 +38,7 @@ public class SearchQueryHandler : IRequestHandler<SearchQuery, IEnumerable<Blog>
         if (!string.IsNullOrWhiteSpace(searchQuery.AuthorId))
         {
             blogsQuery = (MongoDB.Driver.Linq.IMongoQueryable<Domain.Entities.Blog>)blogsQuery
-                .Where(x => x.AuthorId == ObjectId.Parse(searchQuery.AuthorId));
+                .Where(x => x.Author.Id == ObjectId.Parse(searchQuery.AuthorId));
         }
 
         var blogs =  await blogsQuery

@@ -42,7 +42,7 @@ public class SearchQueryHandler : IRequestHandler<SearchQuery, IEnumerable<Model
         var blogs = await blogsQuery
             .ToListAsync(cancellationToken);
 
-        var userAndBlogs = users.GroupJoin(blogs, user => user.Id, blog => blog.AuthorId,
+        var userAndBlogs = users.GroupJoin(blogs, user => user.Id, blog => blog.Author.Id,
             (user, blogsList) => new { User = user, Blogs = blogsList }).ToList();
 
 

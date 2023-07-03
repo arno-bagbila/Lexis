@@ -2,24 +2,20 @@
 
 namespace LexisApi.Models.Output.Users;
 
-public class User
+public class BlogAuthor
 {
     public string Id { get; set; } = null!;
 
     public string FirstName { get; set; } = null!;
 
     public string LastName { get; set; } = null!;
-
-    public int TotalWordsCount { get; set; }
-
-    public int PublishedBlogsCount { get; set; }
 }
 
-public class UserMappingProfile : Profile
+public class BlogAuthorMappingProfile : Profile
 {
-    public UserMappingProfile()
+    public BlogAuthorMappingProfile()
     {
-        CreateMap<Domain.Entities.User, User>()
+        CreateMap<Domain.Entities.User, BlogAuthor>()
             .ForMember(b => b.Id, cfg =>
                 cfg.MapFrom(b => b.Id.ToString()));
     }

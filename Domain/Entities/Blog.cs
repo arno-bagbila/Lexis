@@ -13,6 +13,7 @@ public class Blog
     }
 
     private string _text = null!;
+    private User _author = null!;
 
     /// <summary>
     /// Blog Id
@@ -51,19 +52,23 @@ public class Blog
     public DateTime CreatedOn { get; private set; }
 
     /// <summary>
+    /// Author of the blog
+    /// </summary>
+    public User Author
+    {
+        get => _author;
+        set => _author = value ?? throw LexisException.Create(LexisException.InvalidDataCode, $"{nameof(Author)} must be set");
+    }
+
+    /// <summary>
     /// Check if Blog can be created
     /// </summary>
-    /// <param name="authorId">Author Id linked to the Blog</param>
     /// <param name="publishedOn">Date when the blog should be published</param>
     /// <returns><see cref="ValidationResult"/></returns>
-    private static ValidationResult CanCreate(ObjectId authorId, DateTime publishedOn)
+    private static ValidationResult CanCreate(DateTime publishedOn)
     {
         var errors = new List<(string Name, string Msg)>();
 
-        if (authorId == ObjectId.Empty)
-        {
-            errors.Add((nameof(AuthorId), $"{nameof(AuthorId)} is not valid."));
-        }
 
         if (publishedOn <= DateTime.Now)
         {
@@ -79,14 +84,14 @@ public class Blog
     /// <summary>
     /// Create a Blog
     /// </summary>
-    /// <param name="authorId">Author Id linked to the Blog</param>
+    /// <param name="author">Author Linked to the Blog</param>
     /// <param name="text">Blog text</param>
     /// <param name="publishedOn">Date when the blog should be published</param>
     /// <returns>a <see cref="Blog"/></returns>
     /// <exception cref="Exception">If author Id is empty</exception>
-    public static Blog Create(ObjectId authorId, string text, DateTime publishedOn)
+    public static Blog Create(User author, string text, DateTime publishedOn)
     {
-        var validationResult = CanCreate(authorId, publishedOn);
+        var validationResult = CanCreate(publishedOn);
         if (validationResult != ValidationResult.Success)
         {
             throw LexisException.Create(LexisException.InvalidDataCode, validationResult.ErrorMessage!);
@@ -94,9 +99,10 @@ public class Blog
 
         return new Blog
         {
-            AuthorId = authorId,
             Text = text,
-            PublishedOn = publishedOn
+            PublishedOn = publishedOn,
+            Author = author,
+            AuthorId = author.Id
         };
     }
 

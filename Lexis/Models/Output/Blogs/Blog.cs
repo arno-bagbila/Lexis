@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
+using LexisApi.Models.Output.Users;
 
 namespace LexisApi.Models.Output.Blogs;
 
 public class Blog
 {
     public string Id { get; set; } = null!;
-
-    public string AuthorId { get; set; } = null!;
 
     public string Text { get; set; } = null!;
 
@@ -15,6 +14,8 @@ public class Blog
     public DateTime PublishedOn { get; set; }
 
     public string Category { get; set; } = null!;
+
+    public BlogAuthor Author { get; set; } = null!;
 }
 
 public class BlogMappingProfile : Profile
@@ -23,8 +24,6 @@ public class BlogMappingProfile : Profile
     {
         CreateMap<Domain.Entities.Blog, Blog>()
             .ForMember(b => b.Id, cfg =>
-                cfg.MapFrom(b => b.Id.ToString()))
-            .ForMember(b => b.AuthorId, cfg =>
-                cfg.MapFrom(b => b.AuthorId.ToString()));
+                cfg.MapFrom(b => b.Id.ToString()));
     }
 }

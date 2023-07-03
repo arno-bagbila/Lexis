@@ -6,28 +6,37 @@ namespace Domain.Tests.Entities;
 
 public class BlogTests
 {
+    private readonly User _author;
+
+    public BlogTests()
+    {
+        _author = User.Create("firstName", "lastName");
+    }
+
     [Fact]
-    public void Create_AuthorIdEmpty_ThrowLexisException()
+    public void Create_AuthorIsNull_ThrowLexisException()
     {
         //act
-        Action action = () => Blog.Create(ObjectId.Empty, "text", DateTime.Now.AddHours(1));
+        Action action = () => Blog.Create(null!, "text", DateTime.Now.AddHours(1));
 
         //assert
         Assert.Throws<LexisException>(() => action());
     }
 
     [Fact]
-    public void Create_ValidAuthorId_CreatesBlog()
+    public void Create_ValidParameters_CreatesBlog()
     {
         //arrange
-        var authorId = ObjectId.GenerateNewId();
+        var publishedOn = DateTime.Now.AddHours(1);
 
         //act
-        var blog = Blog.Create(authorId, "text", DateTime.Now.AddHours(1));
+        var blog = Blog.Create(_author, "text", publishedOn);
 
         //assert
         blog.Id.Should().NotBe(ObjectId.Empty);
-        blog.AuthorId.Should().Be(authorId);
+        blog.Author.Should().Be(_author);
+        blog.PublishedOn.Should().Be(publishedOn);
+        blog.Text.Should().Be("text");
     }
 
     [Theory]
@@ -36,11 +45,9 @@ public class BlogTests
     [InlineData(null)]
     public void Create_InvalidText_ThrowLexisException(string text)
     {
-        //arrange
-        var authorId = ObjectId.GenerateNewId();
 
         //act
-        Action action = () => Blog.Create(authorId, text, DateTime.Now.AddHours(1));
+        Action action = () => Blog.Create(_author, text, DateTime.Now.AddHours(1));
 
         //assert
         Assert.Throws<LexisException>(() => action());
@@ -53,8 +60,7 @@ public class BlogTests
     public void SetCategory_InvalidValues_ThrowLexisException(string category)
     {
         //arrange
-        var authorId = ObjectId.GenerateNewId();
-        var blog = Blog.Create(authorId, "Text", DateTime.Now.AddHours(1));
+        var blog = Blog.Create(_author, "Text", DateTime.Now.AddHours(1));
 
         //act
         Action action = () => blog.SetCategory(category);
@@ -67,8 +73,7 @@ public class BlogTests
     public void SetCategory_WithValidValue_CategoryIsSet()
     {
         //arrange
-        var authorId = ObjectId.GenerateNewId();
-        var blog = Blog.Create(authorId, "Text", DateTime.Now.AddHours(1));
+        var blog = Blog.Create(_author, "Text", DateTime.Now.AddHours(1));
         var category = "Category";
 
         //act
@@ -82,7 +87,7 @@ public class BlogTests
     public void Create_PublishedOnNotGreaterThanDateTimeNow_ThrowLexisException()
     {
         //act
-        Action action = () => Blog.Create(ObjectId.Empty, "text", DateTime.Now.AddHours(-1));
+        Action action = () => Blog.Create(_author, "text", DateTime.Now.AddHours(-1));
 
         //assert
         Assert.Throws<LexisException>(() => action());

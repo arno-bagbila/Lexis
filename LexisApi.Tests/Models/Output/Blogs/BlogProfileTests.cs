@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using LexisApi.Models.Output.Blogs;
 using FluentAssertions;
-using MongoDB.Bson;
 using Blog = Domain.Entities.Blog;
+using User = Domain.Entities.User;
 
 namespace LexisApi.Tests.Models.Output.Blogs;
 
@@ -12,7 +12,7 @@ public class BlogProfileTests
 
     public BlogProfileTests()
     {
-        var config = new MapperConfiguration(cfg => cfg.AddProfile<BlogMappingProfile>());
+        var config = new MapperConfiguration(cfg => cfg.AddMaps(typeof(BlogMappingProfile)));
         _mapper = config.CreateMapper();
     }
 
@@ -20,9 +20,9 @@ public class BlogProfileTests
     public void MapAllFromBlogToOutputBlog()
     {
         //arrange
-        var authorId = ObjectId.GenerateNewId();
+        var author = User.Create("firstName", "lastName");
         var publishedOn = DateTime.Now.AddHours(1);
-        var blog = Blog.Create(authorId, "Text", publishedOn);
+        var blog = Blog.Create(author, "Text", publishedOn);
         blog.SetCategory("Category");
 
         //act
@@ -30,8 +30,10 @@ public class BlogProfileTests
 
         //assert
         result.Id.Should().Be(blog.Id.ToString());
-        result.AuthorId.Should().Be(blog.AuthorId.ToString());
-        result.Text.Should().Be(blog.Text);
+        result.Author.Id.Should().Be(blog.Author.Id.ToString());
+        result.Author.FirstName.Should().Be(blog.Author.FirstName);
+        result.Author.LastName.Should().Be(blog.Author.LastName);
+        result.Text.Should().Be("Text");
         result.CreatedOn.Should().Be(blog.CreatedOn);
         result.PublishedOn.Should().Be(publishedOn);
         result.Category.Should().Be("Category");
