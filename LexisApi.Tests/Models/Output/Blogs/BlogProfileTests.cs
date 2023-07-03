@@ -21,7 +21,8 @@ public class BlogProfileTests
     {
         //arrange
         var authorId = ObjectId.GenerateNewId();
-        var blog = Blog.Create(authorId, "Text");
+        var publishedOn = DateTime.Now.AddHours(1);
+        var blog = Blog.Create(authorId, "Text", publishedOn);
         blog.SetCategory("Category");
 
         //act
@@ -32,7 +33,7 @@ public class BlogProfileTests
         result.AuthorId.Should().Be(blog.AuthorId.ToString());
         result.Text.Should().Be(blog.Text);
         result.CreatedOn.Should().Be(blog.CreatedOn);
-        result.PublishedOn.Should().Be(blog.PublishedOn);
+        result.PublishedOn.Should().Be(publishedOn);
         result.Category.Should().Be("Category");
     }
 }

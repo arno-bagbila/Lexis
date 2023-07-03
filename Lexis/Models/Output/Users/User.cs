@@ -9,4 +9,6 @@ public class User
     public string LastName { get; set; } = null!;
 
     public int TotalWordsCount { get; set; }
+
+    public int PublishedBlogsCount { get; set; }
 }

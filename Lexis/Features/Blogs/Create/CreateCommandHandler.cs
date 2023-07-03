@@ -33,7 +33,7 @@ public class CreateCommandHandler : IRequestHandler<CreateCommand, Blog>
         var author =  await _users.Find(authorFilter).FirstOrDefaultAsync(cancellationToken) ?? 
                       throw LexisException.Create(LexisException.InvalidDataCode, "Cannot find User to assign the blog");
 
-        var blog = Domain.Entities.Blog.Create(author.Id, definition.Text);
+        var blog = Domain.Entities.Blog.Create(author.Id, definition.Text, definition.PublishedOn);
         if (!string.IsNullOrWhiteSpace(definition.Category))
         {
             blog.SetCategory(definition.Category);

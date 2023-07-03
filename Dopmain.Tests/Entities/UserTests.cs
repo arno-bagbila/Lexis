@@ -10,7 +10,7 @@ public class UserTests
     [InlineData("")]
     [InlineData(" ")]
     [InlineData(null)]
-    public void Create_InvalidFirstName_ThrowException(string firstName)
+    public void Create_InvalidFirstName_ThrowLexisException(string firstName)
     {
         //act
         Action action = () => User.Create(firstName, "lastName");
@@ -23,7 +23,7 @@ public class UserTests
     [InlineData("")]
     [InlineData(" ")]
     [InlineData(null)]
-    public void Create_InvalidLastName_ThrowException(string lastName)
+    public void Create_InvalidLastName_ThrowLexisException(string lastName)
     {
         //act
         Action action = () => User.Create("firstName", lastName);

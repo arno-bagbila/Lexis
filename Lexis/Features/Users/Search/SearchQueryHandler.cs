@@ -48,8 +48,11 @@ public class SearchQueryHandler : IRequestHandler<SearchQuery, IEnumerable<Model
 
         return userAndBlogs.Select(x => new Models.Output.Users.User
         {
-            FirstName = x.User.FirstName, LastName = x.User.LastName, Id = x.User.Id.ToString(),
-            TotalWordsCount = string.Join(" ", x.Blogs.Select(blog => blog.Text)).Split(' ').ToList().Count
+            FirstName = x.User.FirstName, 
+            LastName = x.User.LastName, 
+            Id = x.User.Id.ToString(),
+            TotalWordsCount = string.Join(" ", x.Blogs.Select(blog => blog.Text)).Split(' ').ToList().Count,
+            PublishedBlogsCount = x.Blogs.Count(blog => blog.PublishedOn < DateTime.Now)
         });
     }
 }

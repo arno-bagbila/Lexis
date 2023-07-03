@@ -54,10 +54,26 @@ public class Blog
     /// Check if Blog can be created
     /// </summary>
     /// <param name="authorId">Author Id linked to the Blog</param>
+    /// <param name="publishedOn">Date when the blog should be published</param>
     /// <returns><see cref="ValidationResult"/></returns>
-    private static ValidationResult CanCreate(ObjectId authorId)
+    private static ValidationResult CanCreate(ObjectId authorId, DateTime publishedOn)
     {
-        return authorId == ObjectId.Empty ? new ValidationResult("AuthorId is not valid") : ValidationResult.Success!;
+        var errors = new List<(string Name, string Msg)>();
+
+        if (authorId == ObjectId.Empty)
+        {
+            errors.Add((nameof(AuthorId), $"{nameof(AuthorId)} is not valid."));
+        }
+
+        if (publishedOn <= DateTime.Now)
+        {
+            errors.Add((nameof(PublishedOn), $"{nameof(PublishedOn)} should be greater than {DateTime.Now}"));
+        }
+
+        return (errors.Count > 0
+            ? new ValidationResult(string.Join(Environment.NewLine, errors.Select(e => e.Msg)),
+                errors.Select(e => e.Name).Distinct())
+            : ValidationResult.Success)!;
     }
 
     /// <summary>
@@ -65,11 +81,12 @@ public class Blog
     /// </summary>
     /// <param name="authorId">Author Id linked to the Blog</param>
     /// <param name="text">Blog text</param>
+    /// <param name="publishedOn">Date when the blog should be published</param>
     /// <returns>a <see cref="Blog"/></returns>
     /// <exception cref="Exception">If author Id is empty</exception>
-    public static Blog Create(ObjectId authorId, string text)
+    public static Blog Create(ObjectId authorId, string text, DateTime publishedOn)
     {
-        var validationResult = CanCreate(authorId);
+        var validationResult = CanCreate(authorId, publishedOn);
         if (validationResult != ValidationResult.Success)
         {
             throw LexisException.Create(LexisException.InvalidDataCode, validationResult.ErrorMessage!);
@@ -78,7 +95,8 @@ public class Blog
         return new Blog
         {
             AuthorId = authorId,
-            Text = text
+            Text = text,
+            PublishedOn = publishedOn
         };
     }
 
