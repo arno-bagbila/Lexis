@@ -11,7 +11,7 @@ public class SearchQueryHandler : BaseHandler, IRequestHandler<SearchQuery, IEnu
     private readonly IMongoCollection<User> _users;
     private readonly IMongoCollection<Blog> _blogs;
 
-    public SearchQueryHandler(IMongoClient client) : base(client)
+    public SearchQueryHandler(IMongoClient client, IConfiguration config) : base(client, config)
     {
         _users = Database.GetCollection<User>(nameof(User));
         _blogs = Database.GetCollection<Blog>(nameof(Blog));

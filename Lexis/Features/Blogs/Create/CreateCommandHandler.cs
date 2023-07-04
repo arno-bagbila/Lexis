@@ -15,7 +15,7 @@ public class CreateCommandHandler : BaseHandler, IRequestHandler<CreateCommand, 
     private readonly IMongoCollection<User> _users;
     private readonly IMapper _mapper;
 
-    public CreateCommandHandler(IMongoClient client, IMapper mapper) : base(client)
+    public CreateCommandHandler(IMongoClient client, IMapper mapper, IConfiguration config) : base(client, config)
     {
         _mapper = mapper;
         _blogs = Database.GetCollection<Domain.Entities.Blog>(nameof(Domain.Entities.Blog));

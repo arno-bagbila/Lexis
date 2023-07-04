@@ -3,7 +3,7 @@ using System.Net;
 using Domain;
 using LexisApi.Models;
 
-namespace LexisApi.Infrastructure.Middlewares;
+namespace LexisApi.Infrastructure.Middlewares.CustomExceptionMiddleware;
 
 public class ExceptionMiddleware
 {

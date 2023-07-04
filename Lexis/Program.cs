@@ -4,6 +4,7 @@ using FluentValidation.AspNetCore;
 using MongoDB.Driver;
 using System.Reflection;
 using Serilog;
+using LexisApi.Infrastructure.Middlewares.CustomExceptionMiddleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +26,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+var connStr = builder.Configuration.GetConnectionString("MongoDb");
 builder.Services.AddSingleton<IMongoClient, MongoClient>(sp =>
-    new MongoClient(builder.Configuration.GetConnectionString("MongoDb")));
+    new MongoClient(connStr));
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddHttpContextAccessor();
@@ -41,6 +43,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.ConfigureCustomExceptionMiddleware();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
@@ -48,3 +52,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Make the implicit Program class public so test projects can access it
+public partial class Program { }

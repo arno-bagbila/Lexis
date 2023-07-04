@@ -14,7 +14,7 @@ public class SearchQueryHandler : BaseHandler, IRequestHandler<SearchQuery, IEnu
     private readonly IMapper _mapper;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public SearchQueryHandler(IMongoClient client, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(client)
+    public SearchQueryHandler(IMongoClient client, IMapper mapper, IHttpContextAccessor httpContextAccessor, IConfiguration config) : base(client, config)
     {
         _mapper = mapper;
         _blogs = Database.GetCollection<Domain.Entities.Blog>(nameof(Domain.Entities.Blog));
