@@ -12,7 +12,7 @@ public class Blog
         Id = ObjectId.GenerateNewId();
     }
 
-    private string _text = null!;
+    private string? _text;
     private User _author = null!;
 
     /// <summary>
@@ -32,7 +32,7 @@ public class Blog
 
     public string Category { get; private set; } = null!;
 
-    public string Text
+    public string? Text
     {
         get => _text;
         set

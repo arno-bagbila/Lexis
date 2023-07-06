@@ -34,22 +34,23 @@ public class SearchQueryHandler : BaseHandler, IRequestHandler<SearchQuery, IEnu
                 (MongoDB.Driver.Linq.IMongoQueryable<User>)usersQuery.Where(x => x.Id == ObjectId.Parse(searchQuery.Id));
         }
 
-        var users = await usersQuery
+        var users = usersQuery
             .ToListAsync(cancellationToken);
 
-        var blogs = await blogsQuery
+        var blogs = blogsQuery
             .ToListAsync(cancellationToken);
-
-        var userAndBlogs = users.GroupJoin(blogs, user => user.Id, blog => blog.Author.Id,
+        
+        await Task.WhenAll(users, blogs);
+        
+        var userAndBlogs = users.Result.GroupJoin(blogs.Result, user => user.Id, blog => blog.AuthorId,
             (user, blogsList) => new { User = user, Blogs = blogsList }).ToList();
-
-
+        
         return userAndBlogs.Select(x => new Models.Output.Users.User
         {
             FirstName = x.User.FirstName, 
             LastName = x.User.LastName, 
             Id = x.User.Id.ToString(),
-            TotalWordsCount = string.Join(" ", x.Blogs.Select(blog => blog.Text)).Split(' ').ToList().Count,
+            TotalWordsCount = x.Blogs.Any() ? string.Join(" ", x.Blogs.Select(blog => blog.Text!.Trim())).Split(' ').ToList().Count : 0,
             PublishedBlogsCount = x.Blogs.Count(blog => blog.PublishedOn < DateTime.Now)
         });
     }

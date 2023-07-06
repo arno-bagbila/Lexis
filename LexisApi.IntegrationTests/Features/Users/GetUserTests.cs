@@ -11,33 +11,14 @@ using LexisApi.Models.Input.Blogs.Create;
 
 namespace LexisApi.IntegrationTests.Features.Users;
 
-public class GetUserTests : IClassFixture<WebApplicationFactory<Program>>
+public class GetUserTests : IntegrationTestBase
 {
-    private readonly WebApplicationFactory<Program> _factory;
-    private readonly HttpClient _client;
-
-    public GetUserTests(WebApplicationFactory<Program> factory)
-    {
-        var projectDir = Directory.GetCurrentDirectory();
-        var configPath = Path.Combine(projectDir, "appsettings.json");
-
-        _factory = factory.WithWebHostBuilder(builder =>
-        {
-            builder.ConfigureAppConfiguration((_, conf) =>
-            {
-                conf.AddJsonFile(configPath);
-            });
-
-        });
-
-        _client = _factory.CreateClient();
-    }
 
     [Fact]
     public async Task GetUser_WithWrongId_ShouldReturnNotFound()
     {
         // Act
-        var response = await _client.GetAsync($"api/users/{ObjectId.GenerateNewId()}");
+        var response = await Client.GetAsync($"api/users/{ObjectId.GenerateNewId()}");
 
         //assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -53,14 +34,16 @@ public class GetUserTests : IClassFixture<WebApplicationFactory<Program>>
             LastName = $"LastName_{Guid.NewGuid()}"
         };
 
-        var userResponse = await _client.PostAsJsonAsync("api/users", createUser);
+        var userResponse = await Client.PostAsJsonAsync("api/users", createUser);
         var user = await userResponse.BodyAs<User>();
 
         // Act
-        var response = await _client.GetAsync($"api/users/{user.Id}");
+        var response = await Client.GetAsync($"api/users/{user.Id}");
+        var userFromGet = await userResponse.BodyAs<User>();
 
         //assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+        userFromGet.TotalWordsCount.Should().Be(0);
     }
 
     [Fact]
@@ -73,7 +56,7 @@ public class GetUserTests : IClassFixture<WebApplicationFactory<Program>>
             LastName = $"LastName_{Guid.NewGuid()}"
         };
 
-        var userResponse = await _client.PostAsJsonAsync("api/users", createUser);
+        var userResponse = await Client.PostAsJsonAsync("api/users", createUser);
         var user = await userResponse.BodyAs<User>();
 
         var createBlog = new CreateBlog
@@ -84,10 +67,10 @@ public class GetUserTests : IClassFixture<WebApplicationFactory<Program>>
             Text = "Test"
         };
 
-        await _client.PostAsJsonAsync("api/blogs", createBlog);
+        await Client.PostAsJsonAsync("api/blogs", createBlog);
 
         // Act
-        var response = await _client.GetAsync($"api/users/{user.Id}");
+        var response = await Client.GetAsync($"api/users/{user.Id}");
         var blogAuthor = await response.BodyAs<User>();
 
         //assert

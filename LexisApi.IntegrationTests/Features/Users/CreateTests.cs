@@ -1,36 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Net;
 using FluentAssertions;
 using LexisApi.IntegrationTests.Extensions;
 using LexisApi.Models.Input.Users.Create;
 using LexisApi.Models.Output.Users;
-using Microsoft.Extensions.Configuration;
 
 namespace LexisApi.IntegrationTests.Features.Users;
 
-public class CreateTests : IClassFixture<WebApplicationFactory<Program>>
+public class CreateTests : IntegrationTestBase
 {
-    private readonly WebApplicationFactory<Program> _factory;
-    private readonly HttpClient _client;
-
-    public CreateTests(WebApplicationFactory<Program> factory)
-    {
-        var projectDir = Directory.GetCurrentDirectory();
-        var configPath = Path.Combine(projectDir, "appsettings.json");
-
-        _factory = factory.WithWebHostBuilder(builder =>
-        {
-            builder.ConfigureAppConfiguration((_, conf) =>
-            {
-                conf.AddJsonFile(configPath);
-            });
-
-        });
-
-        _client = _factory.CreateClient();
-    }
-
     [Fact]
     public async Task CreateUser_WithValidParameter_ShouldReturnCreated()
     {
@@ -44,7 +22,7 @@ public class CreateTests : IClassFixture<WebApplicationFactory<Program>>
         };
 
         // Act
-        var response = await _client.PostAsJsonAsync("api/users", createUser);
+        var response = await Client.PostAsJsonAsync("api/users", createUser);
         var user = await response.BodyAs<User>();
 
         //assert

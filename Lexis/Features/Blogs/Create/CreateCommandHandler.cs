@@ -9,7 +9,7 @@ using Blog = LexisApi.Models.Output.Blogs.Blog;
 
 namespace LexisApi.Features.Blogs.Create;
 
-public class CreateCommandHandler : BaseHandler, IRequestHandler<CreateCommand, Blog>
+public sealed class CreateCommandHandler : BaseHandler, IRequestHandler<CreateCommand, Blog>
 {
     private readonly IMongoCollection<Domain.Entities.Blog> _blogs;
     private readonly IMongoCollection<User> _users;

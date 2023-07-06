@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using System.Net;
 using FluentAssertions;
 using System.Net.Http.Json;
@@ -12,33 +10,13 @@ using LexisApi.Models.Output.Users;
 
 namespace LexisApi.IntegrationTests.Features.Blogs;
 
-public class GetBlogTests : IClassFixture<WebApplicationFactory<Program>>
+public class GetBlogTests : IntegrationTestBase
 {
-    private readonly WebApplicationFactory<Program> _factory;
-    private readonly HttpClient _client;
-
-    public GetBlogTests(WebApplicationFactory<Program> factory)
-    {
-        var projectDir = Directory.GetCurrentDirectory();
-        var configPath = Path.Combine(projectDir, "appsettings.json");
-
-        _factory = factory.WithWebHostBuilder(builder =>
-        {
-            builder.ConfigureAppConfiguration((_, conf) =>
-            {
-                conf.AddJsonFile(configPath);
-            });
-
-        });
-
-        _client = _factory.CreateClient();
-    }
-
     [Fact]
     public async Task GetBlog_WithWrongId_ShouldReturnNotFound()
     {
         // Act
-        var response = await _client.GetAsync($"api/blogs/{ObjectId.GenerateNewId()}");
+        var response = await Client.GetAsync($"api/blogs/{ObjectId.GenerateNewId()}");
 
         //assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -54,7 +32,7 @@ public class GetBlogTests : IClassFixture<WebApplicationFactory<Program>>
             LastName = $"LastName_{Guid.NewGuid()}"
         };
 
-        var userResponse = await _client.PostAsJsonAsync("api/users", createUser);
+        var userResponse = await Client.PostAsJsonAsync("api/users", createUser);
         var user = await userResponse.BodyAs<User>();
 
         var createBlog = new CreateBlog
@@ -65,11 +43,11 @@ public class GetBlogTests : IClassFixture<WebApplicationFactory<Program>>
             Text = "Test"
         };
 
-        var blogResponse = await _client.PostAsJsonAsync("api/blogs", createBlog);
+        var blogResponse = await Client.PostAsJsonAsync("api/blogs", createBlog);
         var blog = await blogResponse.BodyAs<Blog>();
 
         // Act
-        var response = await _client.GetAsync($"api/blogs/{blog.Id}");
+        var response = await Client.GetAsync($"api/blogs/{blog.Id}");
 
         //assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);

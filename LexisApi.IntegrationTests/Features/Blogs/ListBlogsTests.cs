@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
-using FluentAssertions;
-using MongoDB.Bson;
+﻿using FluentAssertions;
 using System.Net;
 using LexisApi.IntegrationTests.Extensions;
 using System.Net.Http.Json;
@@ -12,28 +9,8 @@ using LexisApi.Models.Output.Blogs;
 
 namespace LexisApi.IntegrationTests.Features.Blogs;
 
-public class ListBlogsTests : IClassFixture<WebApplicationFactory<Program>>
+public class ListBlogsTests : IntegrationTestBase
 {
-    private readonly WebApplicationFactory<Program> _factory;
-    private readonly HttpClient _client;
-
-    public ListBlogsTests(WebApplicationFactory<Program> factory)
-    {
-        var projectDir = Directory.GetCurrentDirectory();
-        var configPath = Path.Combine(projectDir, "appsettings.json");
-
-        _factory = factory.WithWebHostBuilder(builder =>
-        {
-            builder.ConfigureAppConfiguration((_, conf) =>
-            {
-                conf.AddJsonFile(configPath);
-            });
-
-        });
-
-        _client = _factory.CreateClient();
-    }
-
     [Fact]
     public async Task ListBlogs_WithExistingBlogs_ShouldReturnOK()
     {
@@ -44,7 +21,7 @@ public class ListBlogsTests : IClassFixture<WebApplicationFactory<Program>>
             LastName = $"LastName_{Guid.NewGuid()}"
         };
 
-        var userResponse = await _client.PostAsJsonAsync("api/users", createUser);
+        var userResponse = await Client.PostAsJsonAsync("api/users", createUser);
         var user = await userResponse.BodyAs<User>();
 
         var createBlog = new CreateBlog
@@ -63,11 +40,11 @@ public class ListBlogsTests : IClassFixture<WebApplicationFactory<Program>>
             Text = "Test"
         };
 
-        await _client.PostAsJsonAsync("api/blogs", createBlog);
-        await _client.PostAsJsonAsync("api/blogs", createSecondBlog);
+        await Client.PostAsJsonAsync("api/blogs", createBlog);
+        await Client.PostAsJsonAsync("api/blogs", createSecondBlog);
 
         // Act
-        var response = await _client.GetAsync("api/blogs");
+        var response = await Client.GetAsync("api/blogs");
         var blogs = await response.BodyAs<IEnumerable<Blog>>();
 
         //assert

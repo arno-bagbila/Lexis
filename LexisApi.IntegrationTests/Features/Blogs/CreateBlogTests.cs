@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Net;
 using FluentAssertions;
 using LexisApi.IntegrationTests.Extensions;
@@ -11,27 +9,8 @@ using LexisApi.Models.Output.Users;
 
 namespace LexisApi.IntegrationTests.Features.Blogs;
 
-public class CreateBlogTests : IClassFixture<WebApplicationFactory<Program>>
+public class CreateBlogTests : IntegrationTestBase
 {
-    private readonly WebApplicationFactory<Program> _factory;
-    private readonly HttpClient _client;
-
-    public CreateBlogTests(WebApplicationFactory<Program> factory)
-    {
-        var projectDir = Directory.GetCurrentDirectory();
-        var configPath = Path.Combine(projectDir, "appsettings.json");
-
-        _factory = factory.WithWebHostBuilder(builder =>
-        {
-            builder.ConfigureAppConfiguration((_, conf) =>
-            {
-                conf.AddJsonFile(configPath);
-            });
-
-        });
-
-        _client = _factory.CreateClient();
-    }
 
     [Fact]
     public async Task CreateBlog_WithNonExistingUser_ShouldReturnBadRequest()
@@ -43,7 +22,7 @@ public class CreateBlogTests : IClassFixture<WebApplicationFactory<Program>>
             LastName = $"LastName_{Guid.NewGuid()}"
         };
 
-        var userResponse = await _client.PostAsJsonAsync("api/users", createUser);
+        var userResponse = await Client.PostAsJsonAsync("api/users", createUser);
         var user = await userResponse.BodyAs<User>();
 
         var createBlog = new CreateBlog
@@ -55,7 +34,7 @@ public class CreateBlogTests : IClassFixture<WebApplicationFactory<Program>>
         };
 
         // Act
-        var response = await _client.PostAsJsonAsync("api/blogs", createBlog);
+        var response = await Client.PostAsJsonAsync("api/blogs", createBlog);
 
         //assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -72,7 +51,7 @@ public class CreateBlogTests : IClassFixture<WebApplicationFactory<Program>>
             LastName = $"LastName_{Guid.NewGuid()}"
         };
 
-        var userResponse = await _client.PostAsJsonAsync("api/users", createUser);
+        var userResponse = await Client.PostAsJsonAsync("api/users", createUser);
         var user = await userResponse.BodyAs<User>();
 
         var createBlog = new CreateBlog
@@ -84,7 +63,7 @@ public class CreateBlogTests : IClassFixture<WebApplicationFactory<Program>>
         };
 
         // Act
-        var response = await _client.PostAsJsonAsync("api/blogs", createBlog);
+        var response = await Client.PostAsJsonAsync("api/blogs", createBlog);
         var blog = await response.BodyAs<Blog>();
 
         //assert
@@ -97,4 +76,5 @@ public class CreateBlogTests : IClassFixture<WebApplicationFactory<Program>>
         blog.Category.Should().Be("sport");
         blog.Text.Should().Be("Test");
     }
+
 }
