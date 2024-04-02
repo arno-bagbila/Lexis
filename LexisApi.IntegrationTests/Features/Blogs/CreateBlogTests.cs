@@ -17,12 +17,6 @@ public class CreateBlogTests : IntegrationTestBase
     public async Task CreateBlog_WithNonExistingUser_ShouldReturnBadRequest()
     {
         //arrange
-        var createUser = new CreateUser
-        {
-            FirstName = $"Firstname_{Guid.NewGuid()}",
-            LastName = $"LastName_{Guid.NewGuid()}"
-        };
-
         var createBlog = new CreateBlog
         {
             AuthorId = ObjectId.GenerateNewId().ToString(),
