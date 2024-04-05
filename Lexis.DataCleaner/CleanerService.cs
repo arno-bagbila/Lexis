@@ -3,22 +3,16 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
-public class CleanerService : IHostedService
+namespace Lexis.DataCleaner;
+
+public class CleanerService(ILogger<CleanerService> logger, IMongoClient client, IConfiguration configuration)
+    : IHostedService
 {
-    private readonly ILogger _logger;
-    private readonly IMongoClient _client;
-    private readonly IConfiguration _configuration;
-    
-    public CleanerService(ILogger<CleanerService> logger, IMongoClient client, IConfiguration configuration)
-    {
-        _logger = logger;
-        _client = client;
-        _configuration = configuration;
-    }
+    private readonly ILogger _logger = logger;
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        var database = _client.GetDatabase(_configuration.GetValue<string>("ConnectionStrings:DatabaseName"));
+        var database = client.GetDatabase(configuration.GetValue<string>("ConnectionStrings:DatabaseName"));
         var blogCollection = database.GetCollection<Domain.Entities.Blog>(nameof(Domain.Entities.Blog));
         var filter = Builders<Domain.Entities.Blog>.Filter.Lt(x => x.PublishedOn, DateTime.Now.AddHours(-1));
         var result = blogCollection.DeleteMany(filter);
