@@ -6,6 +6,7 @@ using LexisApi.Models.Input.Blogs.Create;
 using LexisApi.Models.Input.Users.Create;
 using LexisApi.Models.Output.Blogs;
 using LexisApi.Models.Output.Users;
+using MongoDB.Bson;
 
 namespace LexisApi.IntegrationTests.Features.Blogs;
 
@@ -16,18 +17,9 @@ public class CreateBlogTests : IntegrationTestBase
     public async Task CreateBlog_WithNonExistingUser_ShouldReturnBadRequest()
     {
         //arrange
-        var createUser = new CreateUser
-        {
-            FirstName = $"Firstname_{Guid.NewGuid()}",
-            LastName = $"LastName_{Guid.NewGuid()}"
-        };
-
-        var userResponse = await Client.PostAsJsonAsync("api/users", createUser);
-        var user = await userResponse.BodyAs<User>();
-
         var createBlog = new CreateBlog
         {
-            AuthorId = user.Id,
+            AuthorId = ObjectId.GenerateNewId().ToString(),
             Category = "sport",
             PublishedOn = DateTime.Now.AddDays(1),
             Text = "Test"
@@ -37,7 +29,7 @@ public class CreateBlogTests : IntegrationTestBase
         var response = await Client.PostAsJsonAsync("api/blogs", createBlog);
 
         //assert
-        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
