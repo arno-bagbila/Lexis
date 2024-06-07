@@ -9,9 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
       <None Remove="Configuration\appsettings.json" />
       <Content Include="Configuration\appsettings.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

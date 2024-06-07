@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Tests", "Dopmain.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LexisApi.Tests", "LexisApi.Tests\LexisApi.Tests.csproj", "{58D60703-983A-4839-9FB3-41F79ED215E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexisApi.IntegrationTests", "LexisApi.IntegrationTests\LexisApi.IntegrationTests.csproj", "{7AD19722-9BA0-4C99-87E2-A65C2794997A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LexisApi.IntegrationTests", "LexisApi.IntegrationTests\LexisApi.IntegrationTests.csproj", "{7AD19722-9BA0-4C99-87E2-A65C2794997A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lexis.DataCleaner", "Lexis.DataCleaner\Lexis.DataCleaner.csproj", "{EC8A3AD2-3079-479D-B22E-84A43F599A3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lexis.DataCleaner", "Lexis.DataCleaner\Lexis.DataCleaner.csproj", "{EC8A3AD2-3079-479D-B22E-84A43F599A3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
