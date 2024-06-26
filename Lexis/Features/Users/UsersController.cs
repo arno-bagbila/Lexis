@@ -2,6 +2,7 @@
 using LexisApi.Features.Users.Search;
 using LexisApi.Infrastructure;
 using LexisApi.Models.Input.Users.Create;
+using LexisApi.Models.Output.Users;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,8 +25,9 @@ public class UsersController : MediatorAwareController
     /// </summary>
     /// <param name="createUser">Data for creating a user</param>
     /// <param name="cancellationToken">A cancellation token</param>
-    /// <returns></returns>
+    /// <returns>The created <see cref="User"/></returns>
     [HttpPost]
+    [ProducesResponseType(typeof(User), StatusCodes.Status201Created)]
     public async Task<IActionResult> Create(CreateUser createUser, CancellationToken cancellationToken)
     {
         var command = new CreateCommand(createUser);
@@ -40,8 +42,9 @@ public class UsersController : MediatorAwareController
     /// </summary>
     /// <param name="id">Id of the user</param>
     /// <param name="cancellationToken">A cancellation token</param>
-    /// <returns></returns>
+    /// <returns>A specific <see cref="User"/></returns>
     [HttpGet("{id}", Name = "UserById")]
+    [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get(string id, CancellationToken cancellationToken)
     {
         var searchQuery = new SearchQuery(id);
@@ -55,8 +58,9 @@ public class UsersController : MediatorAwareController
     /// Get all the users
     /// </summary>
     /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <returns>A lis of list of <see cref="User"/></returns>
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<User>), StatusCodes.Status200OK)]
     public async Task<IActionResult> List(CancellationToken cancellationToken)
     {
         var searchQuery = new SearchQuery();
@@ -66,5 +70,4 @@ public class UsersController : MediatorAwareController
     }
 
     #endregion
-
 }

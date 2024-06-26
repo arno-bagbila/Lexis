@@ -1,7 +1,7 @@
 ﻿using LexisApi.Features.Blogs.Create;
 using LexisApi.Features.Blogs.Search;
 using LexisApi.Infrastructure;
-using LexisApi.Models.Input.Blogs.Create;
+using LexisApi.Models.Output.Blogs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,9 +24,10 @@ public class BlogsController : MediatorAwareController
     /// </summary>
     /// <param name="createBlog">Data for creating a blog</param>
     /// <param name="cancellationToken">A cancellation token</param>
-    /// <returns></returns>
+    /// <returns>A created <see cref="Blog"/></returns>
     [HttpPost]
-    public async Task<IActionResult> Create(CreateBlog createBlog, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(Blog), StatusCodes.Status201Created)]
+    public async Task<IActionResult> Create(Models.Input.Blogs.Create.CreateBlog createBlog, CancellationToken cancellationToken)
     {
         var command = new CreateCommand(createBlog);
         var result = await Mediator.Send(command, cancellationToken);
@@ -40,8 +41,9 @@ public class BlogsController : MediatorAwareController
     /// </summary>
     /// <param name="id">Id of the blog</param>
     /// <param name="cancellationToken">A cancellation token</param>
-    /// <returns></returns>
+    /// <returns>A specific <see cref="Blog"/></returns>
     [HttpGet("{id}", Name = "BlogById")]
+    [ProducesResponseType(typeof(Blog), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get(string id, CancellationToken cancellationToken)
     {
         var searchQuery = new SearchQuery(id);
@@ -56,8 +58,9 @@ public class BlogsController : MediatorAwareController
     /// </summary>
     /// <param name="authorId">Id of the author</param>
     /// <param name="cancellationToken">A cancellation token</param>
-    /// <returns></returns>
+    /// <returns>A list of <see cref="Blog"/>filter by the author</returns>
     [HttpGet("author/{authorId}")]
+    [ProducesResponseType(typeof(IEnumerable<Blog>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetByAuthor(string authorId, CancellationToken cancellationToken)
     {
         var searchQuery = new SearchQuery(AuthorId:authorId);
@@ -70,8 +73,9 @@ public class BlogsController : MediatorAwareController
     /// Get all the blogs
     /// </summary>
     /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <returns>A list of <see cref="Blog"/></returns>
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<Blog>), StatusCodes.Status200OK)]
     public async Task<IActionResult> List(CancellationToken cancellationToken)
     {
         var searchQuery = new SearchQuery();
