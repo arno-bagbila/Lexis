@@ -21,4 +21,4 @@ jobs:
         with:
           version: "latest"
           verb: call
-          args: build-csharp-image ----directory=.
+          args: build-csharp-image --directory=.
