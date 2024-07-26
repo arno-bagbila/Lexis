@@ -1,0 +1,24 @@
+name: Dagger
+
+on:
+  push:
+    branches:
+      - dagger
+  pull_request:
+    branches:
+      - dagger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Dagger
+        uses: dagger/dagger-for-github@v5.6.0
+        with:
+          version: "latest"
+          verb: call
+          args: build-csharp-image ----directory=.
