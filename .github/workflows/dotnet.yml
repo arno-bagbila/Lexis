@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       checks: write
+      pull-requests: write
     strategy:
       matrix:
         mongodb-version: [4.2]
@@ -65,7 +66,7 @@ jobs:
         with:
           filename: "Cobertura.xml"
           badge: true
-          fail_below_min: false # just informative for now
+          fail_below_min: false # just informative for now #check
           format: markdown
           hide_branch_rate: false
           hide_complexity: false
