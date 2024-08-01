@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BCBA63E7-CF7C-422C-A5C6-DB129EA68448}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Tests", "Dopmain.Tests\Domain.Tests.csproj", "{89D0EAD5-05FF-47FF-A618-12A10E326281}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Tests", "Domain.Tests\Domain.Tests.csproj", "{89D0EAD5-05FF-47FF-A618-12A10E326281}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LexisApi.Tests", "LexisApi.Tests\LexisApi.Tests.csproj", "{58D60703-983A-4839-9FB3-41F79ED215E0}"
 EndProject
