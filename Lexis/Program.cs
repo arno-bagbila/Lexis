@@ -3,6 +3,10 @@ using Autofac.Extensions.DependencyInjection;
 using FluentValidation.AspNetCore;
 using MongoDB.Driver;
 using System.Reflection;
+using GraphQL;
+using LexisApi.GraphQL;
+using LexisApi.GraphQL.Queries;
+using LexisApi.GraphQL.Types;
 using Serilog;
 using LexisApi.Infrastructure.Middlewares.CustomExceptionMiddleware;
 
@@ -32,7 +36,15 @@ builder.Services.AddSingleton<IMongoClient, MongoClient>(sp =>
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<LexisQuery>();
 
+//GraphQL
+builder.Services.AddGraphQL(options =>
+{
+    options.AddSchema<AppSchema>();
+    options.AddSystemTextJson();
+});
+builder.Services.AddSingleton<ObjectIdGraphType>();
 
 var app = builder.Build();
 
@@ -48,6 +60,11 @@ app.ConfigureCustomExceptionMiddleware();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+//GraphQL
+app.UseGraphQL();
+app.UseGraphQLAltair();
+
 
 app.MapControllers();
 
