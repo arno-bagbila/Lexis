@@ -26,6 +26,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var configurationFile = Path.Combine("Configuration", "appsettings.json");
+var environmentConfigurationFile = Path.Combine("Configuration", $"appsettings.{builder.Environment.EnvironmentName}.json");
+
+builder.Configuration.SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile(configurationFile, optional: false, reloadOnChange: true)
+    .AddJsonFile(environmentConfigurationFile, optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
 var connStr = builder.Configuration.GetConnectionString("MongoDb");
 builder.Services.AddSingleton<IMongoClient, MongoClient>(sp =>
     new MongoClient(connStr));
